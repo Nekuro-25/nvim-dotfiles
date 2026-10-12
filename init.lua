@@ -6,5 +6,6 @@ require("config.lazy")
 
 pcall(vim.cmd.colorscheme, "indigo-night")
 
-vim.opt.clipboard = "unnamedplus"
+vim.opt.linebreak = true     -- Wrap at word boundaries instead of characters
+vim.opt.breakindent = true   -- Keep indentation level on wrapped lines
 
