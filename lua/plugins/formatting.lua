@@ -1,46 +1,47 @@
 return {
-  {
-    "stevearc/conform.nvim",
-    event = { "BufWritePre" },
-    cmd = { "ConformInfo" },
-    keys = {
-      {
-        "<leader>f",
-        function()
-          require("conform").format({
-            async = true,
-            lsp_format = "fallback",
-          })
-        end,
-        mode = "",
-        desc = "Format code",
-      },
-    },
-    opts = {
-      formatters_by_ft = {
-        lua = { "stylua" },
+	{
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
 
-        html = { "prettier" },
-        css = { "prettier" },
-        scss = { "prettier" },
+		cmd = { "ConformInfo" },
 
-        javascript = { "prettier" },
-        javascriptreact = { "prettier" },
-        typescript = { "prettier" },
-        typescriptreact = { "prettier" },
+		keys = {
+			{
+				"<leader>f",
+				function()
+					require("conform").format({
+						async = true,
+						lsp_format = "fallback",
+					})
+				end,
+				mode = "",
+				desc = "Format buffer",
+			},
+		},
 
-        json = { "prettier" },
-        jsonc = { "prettier" },
-        markdown = { "prettier" },
-        yaml = { "prettier" },
+		opts = {
+			formatters_by_ft = {
+				lua = { "stylua" },
 
-        php = { "php_cs_fixer", lsp_format = "fallback" },
-      },
+				html = { "prettier" },
+				css = { "prettier" },
+				scss = { "prettier" },
+				javascript = { "prettier" },
+				javascriptreact = { "prettier" },
+				typescript = { "prettier" },
+				typescriptreact = { "prettier" },
+				json = { "prettier" },
+				jsonc = { "prettier" },
+				yaml = { "prettier" },
+				markdown = { "prettier" },
 
-      format_on_save = {
-        timeout_ms = 1000,
-        lsp_format = "fallback",
-      },
-    },
-  },
+				php = { "php_cs_fixer" },
+			},
+
+			format_on_save = {
+				timeout_ms = 1000,
+				lsp_format = "fallback",
+			},
+		},
+	},
 }

@@ -1,23 +1,53 @@
--- Syntax highlighting yang lebih akurat.
--- Di Arch butuh paket: tree-sitter-cli dan compiler C (base-devel).
 return {
-  "nvim-treesitter/nvim-treesitter",
-  branch = "main",
-  lazy = false,
-  build = ":TSUpdate",
-  config = function()
-    require("nvim-treesitter").install({
-      "lua", "vim", "vimdoc", "bash",
-      "python",
-      "html", "css", "javascript", "json",
-      "markdown", "markdown_inline",
-    })
+	{
+		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		lazy = false,
+		build = ":TSUpdate",
 
-    -- Aktifkan highlight treesitter otomatis untuk filetype yang parser-nya tersedia
-    vim.api.nvim_create_autocmd("FileType", {
-      callback = function(args)
-        pcall(vim.treesitter.start, args.buf)
-      end,
-    })
-  end,
+		config = function()
+			local parsers = {
+				"lua",
+				"vim",
+				"vimdoc",
+				"bash",
+				"python",
+
+				-- Web development
+				"html",
+				"css",
+				"scss",
+				"javascript",
+				"typescript",
+				"tsx",
+				"json",
+				"yaml",
+
+				-- PHP
+				"php",
+
+				-- Dokumentasi dan konfigurasi
+				"markdown",
+				"markdown_inline",
+			}
+
+			require("nvim-treesitter").install(parsers)
+
+			-- Aktifkan Treesitter pada buffer yang mendukung parser.
+			local group = vim.api.nvim_create_augroup("user-treesitter", { clear = true })
+
+			vim.api.nvim_create_autocmd("FileType", {
+				group = group,
+				callback = function(event)
+					local ok = pcall(vim.treesitter.start, event.buf)
+
+					if not ok then
+						-- Parser mungkin belum terpasang atau filetype
+						-- belum memiliki parser yang sesuai.
+						return
+					end
+				end,
+			})
+		end,
+	},
 }
