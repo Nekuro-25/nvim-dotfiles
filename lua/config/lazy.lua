@@ -15,7 +15,7 @@ require("lazy").setup({
   spec = {
     { import = "plugins" }, -- semua file di lua/plugins/*.lua dimuat otomatis
   },
-  install = { colorscheme = { "indigo-night" } },
+  install = { colorscheme = { "ice-night" } },
   checker = { enabled = false },           -- tidak cek update otomatis
   change_detection = { notify = false },
 })

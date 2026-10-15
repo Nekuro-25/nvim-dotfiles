@@ -1,47 +1,66 @@
 return {
-  {
-    "saghen/blink.cmp",
-    version = "1.*",
-    dependencies = {
-      "rafamadriz/friendly-snippets",
-    },
-    opts = {
-      keymap = {
-        preset = "default",
-      },
+	{
+		"saghen/blink.cmp",
+		version = "1.*",
+		dependencies = {
+			"rafamadriz/friendly-snippets",
+		},
 
-      appearance = {
-        nerd_font_variant = "mono",
-      },
+		opts = {
+			keymap = {
+				preset = "default",
 
-      completion = {
-        documentation = {
-          auto_show = false,
-        },
-        list = {
-          selection = {
-            preselect = false,
-            auto_insert = false,
-          },
-        },
-      },
+				["<Tab>"] = {
+					"select_and_accept",
+					"snippet_forward",
+					"fallback",
+				},
 
-      sources = {
-        default = {
-          "lsp",
-          "path",
-          "snippets",
-          "buffer",
-        },
-      },
+				["<S-Tab>"] = {
+					"select_prev",
+					"snippet_backward",
+					"fallback",
+				},
 
-      snippets = {
-        preset = "default",
-      },
+				["<CR>"] = {
+					"accept",
+					"fallback",
+				},
+			},
 
-      fuzzy = {
-        implementation = "prefer_rust_with_warning",
-      },
-    },
-  },
+			appearance = {
+				nerd_font_variant = "mono",
+			},
+
+			completion = {
+				documentation = {
+					auto_show = false,
+				},
+
+				list = {
+					selection = {
+						preselect = false,
+						auto_insert = false,
+					},
+				},
+			},
+
+			sources = {
+				default = {
+					"lsp",
+					"path",
+					"snippets",
+					"buffer",
+				},
+			},
+
+			snippets = {
+				preset = "default",
+			},
+
+			fuzzy = {
+				implementation = "prefer_rust_with_warning",
+			},
+		},
+	},
 }
