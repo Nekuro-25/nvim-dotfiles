@@ -1,5 +1,6 @@
 -- Treesitter (branch main): highlight + indentasi berbasis struktur kode.
 -- Parser dikompilasi lokal, butuh `tree-sitter` CLI dan gcc.
+-- Dimuat saat file pertama dibuka (bukan startup).
 local parsers = {
 	"bash",
 	"blade",
@@ -49,7 +50,8 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		branch = "main",
-		lazy = false,
+		event = { "BufReadPre", "BufNewFile" }, -- was: lazy = false
+		cmd = { "TSUpdate", "TSInstall", "TSUninstall", "TSLog" }, -- :TSUpdate tetap jalan
 		build = ":TSUpdate",
 		config = function()
 			require("nvim-treesitter").install(parsers)

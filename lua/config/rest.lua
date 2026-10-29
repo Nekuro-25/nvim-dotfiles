@@ -23,6 +23,8 @@
 --
 -- Keymap (di buffer .http):  <leader>rr jalankan | <leader>rc salin sebagai curl
 --                            <leader>rH tampilkan header respons
+--
+-- Dimuat lazy: hanya saat file .http pertama dibuka (lihat config/autocmds.lua).
 -- =========================================================
 local M = {}
 
@@ -314,21 +316,16 @@ function M.show_headers()
 	)
 end
 
-function M.setup()
-	vim.api.nvim_create_autocmd("FileType", {
-		group = vim.api.nvim_create_augroup("bagus_rest", { clear = true }),
-		pattern = "http",
-		callback = function(ev)
-			local function map(lhs, rhs, desc)
-				vim.keymap.set("n", lhs, rhs, { buffer = ev.buf, desc = desc })
-			end
-			map("<leader>rr", function()
-				M.run()
-			end, "Jalankan request")
-			map("<leader>rc", M.copy_curl, "Salin sebagai curl")
-			map("<leader>rH", M.show_headers, "Header respons")
-		end,
-	})
+-- Dipanggil dari autocmd FileType http (lihat config/autocmds.lua)
+function M.attach(buf)
+	local function map(lhs, rhs, desc)
+		vim.keymap.set("n", lhs, rhs, { buffer = buf, desc = desc })
+	end
+	map("<leader>rr", function()
+		M.run()
+	end, "Jalankan request")
+	map("<leader>rc", M.copy_curl, "Salin sebagai curl")
+	map("<leader>rH", M.show_headers, "Header respons")
 end
 
 return M

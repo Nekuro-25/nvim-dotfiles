@@ -11,19 +11,19 @@ local o = vim.opt
 o.number = true
 o.relativenumber = true
 o.cursorline = true
-o.signcolumn = "yes"        -- kolom tanda (git/diagnostik) selalu ada, layar tidak "loncat"
+o.signcolumn = "yes" -- kolom tanda (git/diagnostik) selalu ada, layar tidak "loncat"
 o.termguicolors = true
 o.wrap = true
-o.linebreak = true          -- pecah baris di batas kata
-o.breakindent = true        -- baris lanjutan mengikuti indentasi
+o.linebreak = true -- pecah baris di batas kata
+o.breakindent = true -- baris lanjutan mengikuti indentasi
 o.scrolloff = 8
 o.sidescrolloff = 8
-o.showmode = false          -- mode ditampilkan lualine
-o.laststatus = 3            -- satu statusline global
-o.winborder = "rounded"     -- jendela melayang berbingkai bulat
+o.showmode = false -- mode ditampilkan lualine
+o.laststatus = 3 -- satu statusline global
+o.winborder = "rounded" -- jendela melayang berbingkai bulat
 o.fillchars = { eob = " " } -- hilangkan tanda ~ di baris kosong
 o.pumheight = 12
-o.confirm = true            -- tanya dulu sebelum menutup buffer yang belum disimpan
+o.confirm = true -- tanya dulu sebelum menutup buffer yang belum disimpan
 
 -- Karakter tak terlihat. Tab ditampilkan kosong supaya garis indent (ibl) yang tampak.
 o.list = true
@@ -51,7 +51,8 @@ o.splitbelow = true
 o.splitkeep = "screen"
 
 -- Lain-lain
-o.undofile = true           -- undo tetap ada setelah file ditutup
+o.undofile = true -- undo tetap ada setelah file ditutup
+o.hidden = true -- buffer boleh disembunyikan tanpa simpan (wajib utk :NewPage & <leader>bb)
 o.updatetime = 250
 o.timeoutlen = 400
 o.mouse = "a"

@@ -80,4 +80,10 @@ au("FileType", {
 })
 
 -- Klien REST mini untuk file .http / .rest (lihat config/rest.lua)
-require("config.rest").setup()
+-- Dimuat lazy: hanya saat file .http pertama dibuka.
+au("FileType", {
+	pattern = "http",
+	callback = function(ev)
+		require("config.rest").attach(ev.buf)
+	end,
+})

@@ -10,6 +10,8 @@
 --
 --   :NewPage page/kana/hiragana-chart.php
 --   :NewPage milestone/hiragana-m3.php
+--
+-- Dimuat lazy: hanya saat :NewPage dipanggil (lihat init.lua).
 -- =========================================================
 local M = {}
 
@@ -74,7 +76,7 @@ local function ask(prompt, default)
 	return result ~= "" and result or default
 end
 
-local function new_page(file)
+function M.new_page(file)
 	if file == nil or file == "" then
 		vim.notify("Usage: :NewPage <path/to/file.php>", vim.log.levels.ERROR)
 		return
@@ -150,12 +152,6 @@ local function new_page(file)
 			.. "\nNext: tambah <a> di partials/nav.php",
 		vim.log.levels.INFO
 	)
-end
-
-function M.setup()
-	vim.api.nvim_create_user_command("NewPage", function(opts)
-		new_page(opts.args)
-	end, { nargs = "?", complete = "file", desc = "Halaman PHP baru (template learn-jp)" })
 end
 
 return M

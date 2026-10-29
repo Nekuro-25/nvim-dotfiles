@@ -1,4 +1,4 @@
--- Penyuntingan: pencari (telescope), file manager (yazi), git, autopairs, diagnostik
+-- Penyuntingan: pencari (telescope), file manager (yazi), git, autopairs, diagnostik, markdown
 return {
 	-- Pencari file / teks
 	{
@@ -10,7 +10,14 @@ return {
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
-				cond = function() return vim.fn.executable("make") == 1 end,
+				cond = function()
+					return vim.fn.executable("make") == 1
+						and (
+							vim.fn.executable("cc") == 1
+							or vim.fn.executable("gcc") == 1
+							or vim.fn.executable("clang") == 1
+						)
+				end,
 			},
 		},
 		keys = {
@@ -24,7 +31,13 @@ return {
 			{ "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Bantuan" },
 			{ "<leader>fk", "<cmd>Telescope keymaps<CR>", desc = "Keymap" },
 			{ "<leader>fd", "<cmd>Telescope diagnostics<CR>", desc = "Diagnostik" },
-			{ "<leader>fc", function() require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") }) end, desc = "File config Neovim" },
+			{
+				"<leader>fc",
+				function()
+					require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+				end,
+				desc = "File config Neovim",
+			},
 			{ "<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "Git commit" },
 			{ "<leader>gb", "<cmd>Telescope git_branches<CR>", desc = "Git branch" },
 			{ "<leader>gt", "<cmd>Telescope git_status<CR>", desc = "Git status" },
@@ -70,7 +83,7 @@ return {
 	-- Git: tanda perubahan di margin + aksi hunk
 	{
 		"lewis6991/gitsigns.nvim",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" }, -- was: BufReadPre
 		opts = {
 			signs = {
 				add = { text = "▎" },
@@ -86,19 +99,33 @@ return {
 					vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc })
 				end
 				map("n", "]h", function()
-					if vim.wo.diff then vim.cmd.normal({ "]c", bang = true }) else gs.nav_hunk("next") end
+					if vim.wo.diff then
+						vim.cmd.normal({ "]c", bang = true })
+					else
+						gs.nav_hunk("next")
+					end
 				end, "Hunk berikutnya")
 				map("n", "[h", function()
-					if vim.wo.diff then vim.cmd.normal({ "[c", bang = true }) else gs.nav_hunk("prev") end
+					if vim.wo.diff then
+						vim.cmd.normal({ "[c", bang = true })
+					else
+						gs.nav_hunk("prev")
+					end
 				end, "Hunk sebelumnya")
 				map("n", "<leader>ghs", gs.stage_hunk, "Stage hunk")
 				map("n", "<leader>ghr", gs.reset_hunk, "Reset hunk")
-				map("v", "<leader>ghs", function() gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") }) end, "Stage hunk")
-				map("v", "<leader>ghr", function() gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") }) end, "Reset hunk")
+				map("v", "<leader>ghs", function()
+					gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end, "Stage hunk")
+				map("v", "<leader>ghr", function()
+					gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end, "Reset hunk")
 				map("n", "<leader>ghS", gs.stage_buffer, "Stage seluruh buffer")
 				map("n", "<leader>ghu", gs.undo_stage_hunk, "Batalkan stage hunk")
 				map("n", "<leader>ghp", gs.preview_hunk_inline, "Pratinjau hunk")
-				map("n", "<leader>ghb", function() gs.blame_line({ full = true }) end, "Blame baris ini")
+				map("n", "<leader>ghb", function()
+					gs.blame_line({ full = true })
+				end, "Blame baris ini")
 				map("n", "<leader>ghd", gs.diffthis, "Diff terhadap index")
 				map({ "o", "x" }, "ih", "<cmd>Gitsigns select_hunk<CR>", "Pilih hunk")
 			end,
@@ -109,7 +136,7 @@ return {
 	{ "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
 
 	-- Tutup dan ganti nama tag HTML/JSX otomatis
-	{ "windwp/nvim-ts-autotag", event = { "BufReadPre", "BufNewFile" }, opts = {} },
+	{ "windwp/nvim-ts-autotag", event = { "BufReadPost", "BufNewFile" }, opts = {} },
 
 	-- Daftar diagnostik / referensi yang rapi
 	{
@@ -118,9 +145,17 @@ return {
 		opts = {},
 		keys = {
 			{ "<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", desc = "Diagnostik (semua)" },
-			{ "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", desc = "Diagnostik (buffer ini)" },
+			{
+				"<leader>xX",
+				"<cmd>Trouble diagnostics toggle filter.buf=0<CR>",
+				desc = "Diagnostik (buffer ini)",
+			},
 			{ "<leader>xs", "<cmd>Trouble symbols toggle focus=false<CR>", desc = "Simbol" },
-			{ "<leader>xl", "<cmd>Trouble lsp toggle focus=false win.position=right<CR>", desc = "Definisi / referensi LSP" },
+			{
+				"<leader>xl",
+				"<cmd>Trouble lsp toggle focus=false win.position=right<CR>",
+				desc = "Definisi / referensi LSP",
+			},
 			{ "<leader>xq", "<cmd>Trouble qflist toggle<CR>", desc = "Quickfix" },
 		},
 	},
@@ -132,10 +167,36 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = {},
 		keys = {
-			{ "]t", function() require("todo-comments").jump_next() end, desc = "TODO berikutnya" },
-			{ "[t", function() require("todo-comments").jump_prev() end, desc = "TODO sebelumnya" },
+			{
+				"]t",
+				function()
+					require("todo-comments").jump_next()
+				end,
+				desc = "TODO berikutnya",
+			},
+			{
+				"[t",
+				function()
+					require("todo-comments").jump_prev()
+				end,
+				desc = "TODO sebelumnya",
+			},
 			{ "<leader>xt", "<cmd>Trouble todo toggle<CR>", desc = "TODO (Trouble)" },
 			{ "<leader>st", "<cmd>TodoTelescope<CR>", desc = "Cari TODO" },
+		},
+	},
+
+	-- Markdown: tampilan terformat langsung di buffer (judul, kode, daftar, tabel)
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		ft = { "markdown" },
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+		keys = {
+			{ "<leader>um", "<cmd>RenderMarkdown toggle<CR>", desc = "Toggle render Markdown" },
+		},
+		opts = {
+			heading = { sign = false },
+			code = { sign = false, width = "block" },
 		},
 	},
 }

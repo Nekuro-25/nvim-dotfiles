@@ -32,8 +32,8 @@ map("n", "<leader>bb", "<cmd>e #<CR>", { desc = "Buffer sebelumnya (bolak-balik)
 map("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Tutup buffer" })
 
 -- Indentasi di visual mode tanpa kehilangan seleksi
-map("v", "<", "<gv")
-map("v", ">", ">gv")
+map("v", "<", "<gv", { desc = "Indent kiri (pertahankan seleksi)" })
+map("v", ">", ">gv", { desc = "Indent kanan (pertahankan seleksi)" })
 
 -- Geser baris terpilih naik/turun
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Geser baris ke bawah" })

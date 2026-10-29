@@ -9,7 +9,7 @@ return {
 
 	{
 		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" }, -- was: BufReadPre
 		dependencies = {
 			"mason-org/mason.nvim",
 			"mason-org/mason-lspconfig.nvim",
@@ -45,7 +45,7 @@ return {
 						"blade",
 					},
 				},
-				intelephense = {},
+				intelephense = { filetypes = { "php", "blade" } },
 				marksman = {},
 			}
 
